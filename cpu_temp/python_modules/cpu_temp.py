@@ -2,20 +2,24 @@
 import os
 
 descriptors = list()
-sysdir = '/sys/devices/platform/'
+sysdirs = [
+    ('/sys/devices/platform/', 'coretemp'),
+    ('/sys/class/thermal/', 'thermal_zone'),
+]
 handler_dict = dict()
 
 def metric_init(params):
     global descriptors
-    try:
-        coretemp_list = [i for i in os.listdir(sysdir) if i.startswith('coretemp')]
-    except OSError:
-        print 'No dir named' + sysdir
+    temp_list = []
+    for (sysdir, prefix) in sysdirs:
+        try:
+            temp_list = temp_list + [i for i in os.listdir(sysdir) if i.startswith(prefix)]
+        except OSError:
+            print 'No dir named' + sysdir + ', skipping'
+    if not temp_list:
+        print 'No temperature directories found'
         os._exit(1)
-    if not coretemp_list:
-        print 'No dir name starts with coretemp'
-        os._exit(1)
-    for coretemp in coretemp_list:
+    for temp_dir in temp_list:
         coreinput_list = [i for i in os.listdir(sysdir + coretemp) if i.endswith('_input')]
         try:
             with open(sysdir + coretemp + '/temp1_label','r') as f:

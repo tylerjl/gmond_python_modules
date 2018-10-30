@@ -1,0 +1,19 @@
+raspberrypi/cpu_temp
+====================
+
+Python module for ganglia 3.1+.
+
+Collects thermal metrics from `/sys/class/thermal/thermal_zone0/temp` on the [raspberry pi](https://www.raspberrypi.org/).
+
+Install
+=======
+
+Copy rpi-cpu_temp.py from python_modules to your python modules directory e.g.
+
+/usr/lib64/ganglia/python_modules
+
+and rpi-cpu_temp.pyconf to
+
+/etc/ganglia/conf.d/
+
+Restart Gmond and you are done.
